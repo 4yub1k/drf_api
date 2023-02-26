@@ -14,7 +14,6 @@ This is Django Rest Framework based Polling API, You can add Question and Option
 ![](https://img.shields.io/badge/Django-4.1.7-green)
 ![](https://img.shields.io/badge/DRF-3.14.0-green)
 ![](https://img.shields.io/badge/Python-3.11.1-lightgreen)
-![](https://github.com/4yub1k/djblog/actions/workflows/myBlog.yml/badge.svg)
 ![](https://img.shields.io/badge/Release-0.1.1-orange)
 
 ## Release 1.4.1:
