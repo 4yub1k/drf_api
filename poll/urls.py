@@ -12,6 +12,6 @@ urlpatterns = [
     # path("options/", ListOption.as_view(), name="list_options"),
     path("polls/<int:id>/options/<int:option_id>/vote/", CreateVote.as_view(), name="create_vote"),
 
-    path("users/", CreateUser.as_view(), name="create_user"),
-    path("login/", LoginUser.as_view(), name="login_user"),
+    path("users/register/", CreateUser.as_view(), name="create_user"),
+    path("users/login/", LoginUser.as_view(), name="login_user"),
 ]
