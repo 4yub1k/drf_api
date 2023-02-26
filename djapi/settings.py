@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "poll",
     "rest_framework",
     "rest_framework.authtoken",
+    "drf_spectacular",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,7 +54,19 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
+
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Django DRF Poll",
+    "DESCRIPTION": "This is Django Rest Framework based Polling API, You can add Question and Options to it, with voting.",
+    "VERSION": "0.0.1",
+    'CONTACT': {"name": "Salah Ud Din", "url": "https://github.com/4yub1k"},
+    "LICENSE": {"name": "MIT License", "url": "https://github.com/4yub1k/dj_poll_api/blob/main/LICENSE"},
+    # 'TOS': "",  # Terms of service
+    "PREPROCESSING_HOOKS": ["djapi.excluded_path.custom_preprocessing_hook"]
 }
 
 ROOT_URLCONF = 'djapi.urls'
@@ -123,6 +136,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'djapi/static')
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
