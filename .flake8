@@ -1,0 +1,8 @@
+[flake8]
+exclude = 
+    .venv
+    .vscode
+    migrations
+    .git
+
+max-line-length = 160
