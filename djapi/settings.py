@@ -62,7 +62,7 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     "TITLE": "Django DRF Poll",
     "DESCRIPTION": "This is Django Rest Framework based Polling API, You can add Question and Options to it, with voting.",
-    "VERSION": "0.0.1",
+    "VERSION": "1.2.1",
     'CONTACT': {"name": "Salah Ud Din", "url": "https://github.com/4yub1k"},
     "LICENSE": {"name": "MIT License", "url": "https://github.com/4yub1k/dj_poll_api/blob/main/LICENSE"},
     # 'TOS': "",  # Terms of service
