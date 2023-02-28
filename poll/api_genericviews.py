@@ -34,6 +34,13 @@ class ListCreatePoll(generics.ListCreateAPIView):
     @extend_schema(
         summary="Add new poll/question.",
         description="Add new poll.",
+        examples=[
+            OpenApiExample(
+                "Example 1",
+                value={"question": "Most Beautiful Island in world?"},
+                request_only=True
+            ),
+        ]
     )
     def post(self, request):
         question = request.data.get("question")
@@ -124,7 +131,14 @@ class ListCreateOption(generics.ListCreateAPIView):
 
     @extend_schema(
         summary="Add new options.",
-        description="Add the options using the option id, and the id of question/poll."
+        description="Add the options using the option id, and the id of question/poll.",
+        examples=[
+            OpenApiExample(
+                "Example 1",
+                value={"option": "Your Option."},
+                request_only=True
+            ),
+        ]
     )
     def post(self, request, id):
         option = request.data.get("option")  # request.data is similar to request.POST/GET
@@ -132,6 +146,10 @@ class ListCreateOption(generics.ListCreateAPIView):
         serializer = self.serializer_class(data=data)
 
         if serializer.is_valid():
+
+            poll = Poll.objects.get(id=self.kwargs["id"])
+            if not request.user == poll.created_by:
+                raise PermissionDenied("You are not allowed to Add Options")
             try:
                 serializer.save()
             except IntegrityError:
@@ -157,15 +175,17 @@ class DetailOption(generics.RetrieveDestroyAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-    @extend_schema(
-        summary="Delete the Option.",
-        description="Delete the Option using the option id, and the id of question/poll.",
-        examples=[OpenApiExample("test", value={"adsd"})]
-    )
+    # @extend_schema(
+    #     summary="Delete the Option.",
+    #     description="Delete the Option using the option id, and the id of question/poll.",
+    #     examples=[OpenApiExample("test", value={"adsd"})]
+    # )
     def destroy(self, request, *args, **kwargs):
         option = self.get_object()
 
+        # Only user who created the poll can delete the options.
         if not request.user == option.poll.created_by:
+            print(request.user, option.poll.created_by)
             raise PermissionDenied("You are not allowed to delete this")
         return super().destroy(self, request, *args, **kwargs)
 

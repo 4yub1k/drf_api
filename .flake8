@@ -4,5 +4,6 @@ exclude =
     .vscode
     migrations
     .git
+    poll_*
 
 max-line-length = 160

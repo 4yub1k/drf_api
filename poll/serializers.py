@@ -22,7 +22,7 @@ class VoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vote
         fields = "__all__"
-        extra_kwargs = {"poll": {"read_only": True}, "option": {"read_only": True}}     # don't show during POST
+        # extra_kwargs = {"poll": {"read_only": True}, "option": {"read_only": True}}
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -46,5 +46,5 @@ class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
         fields = ["id", "question", "option", "created_by", "created_on"]
-        extra_kwargs = {"created_by": {"read_only": True}, "created_on": {"read_only": True}}
+        # extra_kwargs = {"created_by": {"read_only": True}, "created_on": {"read_only": True}}
         # fields = "__all__"      # it will nest the serializer, add field automatically
