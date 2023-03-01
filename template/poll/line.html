@@ -1,0 +1,48 @@
+<div class="card mb-3 mt-3">
+    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#lineChartCollapse" aria-expanded="false"
+        aria-controls="lineChartCollapse">Line Chart : <b>{{question}}</b></div>
+    <div class="collapse" id="lineChartCollapse">
+        <div class="card-body">
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const ctx3 = document.getElementById('lineChart').getContext('2d');
+                    const plotData = JSON.parse('{{plotvalue|safe}}');
+                    const optionData = JSON.parse('{{option|safe}}');
+
+                    let options = []
+                    let votes = []
+                    for (let i = 0; i < optionData.length; i++) {
+                        options.push(optionData[i].option);
+                        if (plotData.length > i) {
+                            votes.push(plotData[i].total);
+                        } else {
+                            votes.push(0);
+                        }
+                    }
+                    const lineChart = new Chart(ctx3, {
+                        type: 'line',
+                        data: {
+                            labels: options,
+                            datasets: [{
+                                label: '# of Votes',
+                                data: votes,
+                                backgroundColor: [
+                                    "rgba(171, 234, 166, 0.8)", // Chart Area below, color
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)', // line color
+                                ],
+                                borderWidth: 4,
+                                fill: true
+                                // fill: false, // fill area under line
+                            }]
+                        },
+                    });
+                });
+            </script>
+            <div>
+                <canvas id="lineChart" width="800" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

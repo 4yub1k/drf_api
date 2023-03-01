@@ -1,6 +1,6 @@
 from django.urls import path
 from .api_genericviews import ListCreatePoll, ListCreateOption,\
-    CreateVote, DetailPoll, DetailOption, CreateUser, LoginUser
+    CreateVote, DetailPoll, DetailOption, CreateUser, LoginUser, plotview
 # from .api_genericviews import ListPoll, ListOption, CreateVote, DetailPoll, CreatePoll
 
 urlpatterns = [
@@ -11,6 +11,7 @@ urlpatterns = [
     path("polls/<int:id>/options/<int:option_id>/", DetailOption.as_view(), name="detail_option"),
     # path("options/", ListOption.as_view(), name="list_options"),
     path("polls/<int:id>/options/<int:option_id>/vote/", CreateVote.as_view(), name="create_vote"),
+    path("plot/<int:poll_id>/", plotview, name="plot"),
 
     path("users/register/", CreateUser.as_view(), name="create_user"),
     path("users/login/", LoginUser.as_view(), name="login_user"),
