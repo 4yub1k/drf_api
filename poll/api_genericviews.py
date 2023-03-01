@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from .serializers import PollSerializer, OptionSerializer, VoteSerializer, UserSerializer
 from .models import Poll, Option
 from rest_framework.response import Response
+from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 # from rest_framework.permissions import AllowAny
 from django.db import IntegrityError
@@ -10,6 +11,8 @@ from rest_framework.exceptions import NotFound, ValidationError
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import PermissionDenied
 from drf_spectacular.utils import extend_schema, OpenApiExample
+from django.db.models import Count
+from rest_framework.decorators import api_view
 
 """
 For Detail About views: https://www.geeksforgeeks.org/class-based-views-django-rest-framework/
@@ -71,7 +74,7 @@ class DetailPoll(generics.RetrieveDestroyAPIView):
         return super().get(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
-        poll = Poll.objects.get(pk=self.kwargs.get("id"))
+        poll = get_object_or_404(Poll, pk=self.kwargs.get("id"))
 
         if not request.user == poll.created_by:
             raise PermissionDenied("You are not allowed to delete this")
@@ -147,7 +150,7 @@ class ListCreateOption(generics.ListCreateAPIView):
 
         if serializer.is_valid():
 
-            poll = Poll.objects.get(id=self.kwargs["id"])
+            poll = get_object_or_404(Poll, id=self.kwargs["id"])
             if not request.user == poll.created_by:
                 raise PermissionDenied("You are not allowed to Add Options")
             try:
@@ -169,7 +172,7 @@ class DetailOption(generics.RetrieveDestroyAPIView):
     # use get_object for detailed view, get_queryset for List view.
 
     def get_object(self):
-        return Option.objects.get(poll_id=self.kwargs["id"], id=self.kwargs["option_id"])
+        return get_object_or_404(Option, poll_id=self.kwargs["id"], id=self.kwargs["option_id"])
 
     @extend_schema(summary="Get option by ID")
     def get(self, request, *args, **kwargs):
@@ -232,3 +235,30 @@ class LoginUser(APIView):
             return Response({"token": user.auth_token.key}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Wrong username/password."}, status=status.HTTP_200_OK)
+
+
+@extend_schema(
+    summary="Plots of poll {poll_id}",
+)
+@api_view(['GET'])
+def plotview(request, poll_id):
+    # votes = Vote.objects.filter(poll_id=poll_id).values("poll_id").annotate(total=Count("vote_by_id"))
+    poll = get_object_or_404(Poll, id=poll_id)
+    option = poll.option_poll.all().values("option")
+    votes = poll.vote_poll.all().values("option_id").annotate(total=Count("vote_by_id"))
+    # votes = poll.vote_poll.all().values("option_id").annotate(total=Count("vote_by_id"), question1=Value(poll.question,
+    # output_field=CharField()))
+    # print(option)
+    from json import dumps
+    # javascript json cries over single and double quotations.
+    # print(dumps(list(votes)))     [{"option_id": 13, "total": 3}, {"option_id": 14, "total": 1}]
+    # print(list(votes))            [{'option_id': 13, 'total': 3}, {'option_id': 14, 'total': 1}
+    return render(
+        request,
+        "poll/plot.html",
+        {
+            "plotvalue": dumps(list(votes)),
+            "option": dumps(list(option)),
+            "question": poll.question
+        }
+    )

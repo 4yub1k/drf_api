@@ -12,9 +12,11 @@ This is Django Rest Framework based Polling API, You can add Question and Option
 - Retrieve all options of question, and more.
 
 ![](https://img.shields.io/badge/Django-4.1.7-green)
-![](https://img.shields.io/badge/DRF-3.14.0-green)
+![](https://img.shields.io/badge/DRF-3.14.0-yellowgreen)
+![](https://img.shields.io/badge/Bootstrap-5.3-blue)
+![](https://img.shields.io/badge/ChartJS-4.2.1-orange)
 ![](https://img.shields.io/badge/Python-3.11.1-lightgreen)
-![](https://img.shields.io/badge/Release-0.1.1-orange)
+![](https://img.shields.io/badge/Release-1.5.1-green)
 
 ## Release 1.4.1:
   [Documentation](#documentation)
